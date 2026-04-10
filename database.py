@@ -1,3 +1,4 @@
+import os
 from datetime import datetime, timedelta
 
 from config import FREE_LIMIT_HABITS, FREE_LIMIT_REMINDERS
@@ -318,6 +319,11 @@ def get_habit_stats(habit_id):
         db.close()
 
 
+DATABASE_URL = os.getenv("DATABASE_URL")
+if not DATABASE_URL:
+    DATABASE_URL = "postgresql://postgres:DsBuNBVsMxdHTQqJJQJNYlOoXQQPVjDj@postgres.railway.internal:5432/railway"
+
+
 def create_subscription_request(user_id, username, amount):
     db = SessionLocal()
     try:
@@ -433,7 +439,6 @@ def get_dashboard_stats():
         }
     finally:
         db.close()
-
 
 init_db()
 ensure_schema()
