@@ -1,7 +1,8 @@
 import os
 from datetime import datetime, timedelta
 
-from config import FREE_LIMIT_HABITS, FREE_LIMIT_REMINDERS
+from sqlalchemy import create_engine
+from config import DATABASE_URL, FREE_LIMIT_HABITS, FREE_LIMIT_REMINDERS
 from models import Habit, HabitLog, Reminder, SessionLocal, SubscriptionRequest, User, ensure_schema, init_db
 
 
@@ -439,6 +440,11 @@ def get_dashboard_stats():
         }
     finally:
         db.close()
+
+if DATABASE_URL:
+    if DATABASE_URL.startswith("postgres://"):
+        DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql://", 1)
+    engine = create_engine(DATABASE_URL, pool_pre_ping=True)
 
 init_db()
 ensure_schema()
